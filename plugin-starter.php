@@ -10,6 +10,36 @@
  * Author URI: http://agency.sc/
  */
 
+/*
+ * GETTING STARTED WITH THE STARTER
+ * ---------------------------------------------------------
+ *
+ * Every time you use the plugin starter you need to do
+ * run a few find/replaces on the files.
+ * 
+ * On this file you need to process the following strings:
+ *
+ * 1. Plugin_Starter
+ * 2. Plugin Starter
+ * 3. plugin_starter
+ * 4. plugin-starter
+ *
+ * Then rename this file, the template tags file and the title in the plugin options.
+ *
+ * FOLDER STRUCTURE
+ * Should you need to add any vendor libraries (think API wrappers),
+ * add them to a folder called 'libs'. Initiate the classes in __construct.
+ *
+ * CONSISTENT DOCUMENTATION
+ * All functions you write in this class should be documented in phpDoc,
+ * including what the function does, what params it takes and what it outputs.
+ * You can see the full phpDoc syntax here: goo.gl/09S2wc
+ *
+ * WRAPPING UP
+ * Keep code clean. Once you've done these steps, remove these instructions
+ * 
+ */
+
 if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
@@ -48,6 +78,10 @@ class Plugin_Starter {
 
 		// Shortcodes
 		// add_shortcode('students', array($this, 'shortcode'));
+		
+		// Notices (add these when you need to show the notice)
+		// add_action( 'admin_notices', array($this, 'admin_success'));
+		// add_action( 'admin_notices', array($this, 'admin_error'));
 				
 	}
 
@@ -224,9 +258,68 @@ class Plugin_Starter {
 	}
 
 	/**
-	 * Email wrapper, to allow for string replacement
+	 * Outputs a WordPress error notice
+	 * 
+	 * Push your error to $this->errors then show with:
+	 * add_action( 'admin_notices', array($this, 'admin_error'));
 	 */
-	public function email($to, $subject, $message, $replacements=array()) {
+	public function admin_error() {
+
+		if(!$this->errors) return;
+
+		foreach($this->errors as $error) :
+		
+	?>
+
+		<div class="error settings-error notice is-dismissible"> 
+			
+			<p><strong><?php print $error ?></strong></p>
+			<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+		
+		</div>
+
+	<?php 
+
+		endforeach;
+
+	}
+
+	/**
+	 * Outputs a WordPress notice
+	 * 
+	 * Push your error to $this->notices then show with:
+	 * add_action( 'admin_notices', array($this, 'admin_success'));
+	 */
+	public function admin_success() {
+
+		if(!$this->notices) return;
+
+		foreach($this->notices as $notice) : 
+
+	?>
+
+		<div class="updated settings-error notice is-dismissible"> 
+			
+			<p><strong><?php print $notice ?></strong></p>
+			<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+		
+		</div>
+
+	<?php 
+		
+		endforeach;
+
+	}
+
+	/**
+	 * Email wrapper, to allow for string replacement
+	 * 
+	 * @param string $to email address
+	 * @param string $subject
+	 * @param string $message
+	 * @param array $replacements array of key => value replacements
+	 */
+	public function email($to, $subject, $message, $replacements = array()) {
 
 		//replacements
 		foreach ($replacements as $variable => $replacement) {

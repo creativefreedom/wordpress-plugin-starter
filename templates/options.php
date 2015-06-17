@@ -6,7 +6,7 @@
  ?>
 <div class="wrap">
     
-    <h1><?php _e('Plugin Starter'); ?></h1>
+    <h2><?php _e('Plugin Starter'); ?></h2>
     	    	
 	<div>
 	
