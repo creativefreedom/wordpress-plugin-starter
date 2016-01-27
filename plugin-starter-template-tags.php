@@ -1,14 +1,14 @@
 <?php
 
 
-function have_posttype () { 
-	
+function have_posttype () {
+
 	global $plugin_starter;
 
 	if ($plugin_starter->posttype) {
 
 		$plugin_starter->posttype = $plugin_starter->posttype ? next($plugin_starter->posttypes) : reset($plugin_starter->posttypes);
-		
+
 		if (! $plugin_starter->posttype) {
 
 			$plugin_starter->posttypes = false;
@@ -33,3 +33,6 @@ function have_posttype () {
 	return false;
 
 }
+
+
+
