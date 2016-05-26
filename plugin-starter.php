@@ -40,6 +40,8 @@
  *
  */
 
+
+
 if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
@@ -86,6 +88,13 @@ class Plugin_Starter {
 
 	}
 
+   /**
+    * Install
+    * ---------------------------------------------
+    * @return false
+    * ---------------------------------------------
+    **/
+
 	public static function install() {
 
 		/**
@@ -96,6 +105,13 @@ class Plugin_Starter {
 
 	}
 
+   /**
+    * Setup
+    * ---------------------------------------------
+    * @return false
+    * ---------------------------------------------
+    **/
+
 	public function setup() {
 
 		// register types
@@ -103,6 +119,12 @@ class Plugin_Starter {
 
 	}
 
+   /**
+    * Register Types
+    * ---------------------------------------------
+    * @return false
+    * ---------------------------------------------
+    **/
 
 	public function register_types() {
 
@@ -130,6 +152,15 @@ class Plugin_Starter {
 
 	}
 
+   /**
+    * Build Type Labels
+    * ---------------------------------------------
+    * @param  $name   | String | Singular Name
+    * @param  $plural | String | Plural Name
+    * @return Array
+    * ---------------------------------------------
+    **/
+
 	private static function build_type_labels($name, $plural) {
 
 		return array(
@@ -150,23 +181,27 @@ class Plugin_Starter {
 
 	}
 
-	/**
-	 * Enqueue Scripts
-	 */
+   /**
+    * Scripts
+    * ---------------------------------------------
+    * @return null
+    * ---------------------------------------------
+    **/
+
 	public function scripts() {
 
 		// wp_enqueue_script('jquery.validate', '//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js', array('jquery'), $this->version, true);
 
 	}
 
-	/**
-	 * Form processing
-	 *
-	 * This function powers your form processing,
-	 * based on the value of a hidden "plugin_starter_action" field
-	 *
-	 * Route forms to other functions within this class.
-	 */
+
+   /**
+    * Forms
+    * ---------------------------------------------
+    * @return false
+    * ---------------------------------------------
+    **/
+
 	public function forms() {
 
 		if (!isset($_POST['plugin_starter_action'])) return;
@@ -184,13 +219,14 @@ class Plugin_Starter {
 	}
 
 
-	/**
-	 * Custom URLS
-	 *
-	 * Manages custom permalinks and routes for
-	 * plugin pages and API calls
-	 *
-	 */
+   /**
+    * Custom URL Paths
+    * ---------------------------------------------
+    * @param  $wp | Object
+    * @return false
+    * ---------------------------------------------
+    **/
+
 	public function custom_url_paths($wp) {
 
 		$pagename = (isset($wp->query_vars['pagename'])) ? $wp->query_vars['pagename'] : $wp->request;
@@ -208,9 +244,13 @@ class Plugin_Starter {
 
 	}
 
-	/**
-	 * Register options page
-	 */
+   /**
+    * Register Options Page
+    * ---------------------------------------------
+    * @return false
+    * ---------------------------------------------
+    **/
+
 	public function register_options_page() {
 
 		// main page
@@ -220,18 +260,24 @@ class Plugin_Starter {
 	}
 
 
-	/**
-	 * Get options template
-	 */
+   /**
+    * Include Options Page
+    * ---------------------------------------------
+    * @return false
+    * ---------------------------------------------
+    **/
+
 	public function include_options() { require('templates/options.php'); }
 
 
-	/**
-	 * Register plugin settings
-	 *
-	 * Register each unique setting administered on your
-	 * options page in a new line in the array.
-	 */
+
+   /**
+    * Plugin Options
+    * ---------------------------------------------
+    * @return false
+    * ---------------------------------------------
+    **/
+
 	public function plugin_options() {
 
 		$options = array(
@@ -340,18 +386,7 @@ class Plugin_Starter {
 	}
 
 
-	/**
-	 * Output JSON
-	 *
-	 * @param $array Array to encode
-	 */
-	public function output_json($array) {
 
-		header('Content-type: application/json');
-		echo json_encode($array);
-		exit();
-
-	}
 
    /**
     * Template
@@ -374,16 +409,20 @@ class Plugin_Starter {
 
 	}
 
+
    /**
     * Template Include
     * ---------------------------------------------
-    * @param $template | String | name of the template
-    * @param $data | Anything | Data to pass to a template
+    * @param $template | String   | name of the template
+    * @param $data     | Anything | Data to pass to a template
+    * @param $name     | String   | Data value name
     * @return false
     * ---------------------------------------------
     **/
 
-	public function template_include($template,$data = null){
+	public function template_include($template,$data = null,$name = null){
+
+		if(isset($name)){ ${$name} = $data; }
 		$path = $this->template($template);
 		include($path);
 	}
@@ -404,12 +443,15 @@ class Plugin_Starter {
 
 	}
 
-	/**
-	 * Output CSV
-	 *
-	 * @param $array Array to output (keyed)
-	 * @param $filename Filename to download
-	 */
+   /**
+    * Output CSV
+    * ---------------------------------------------
+    * @param $array    | Array/Object | Data to output
+    * @param $filename | String       | Name of the file to export
+    * @return false
+    * ---------------------------------------------
+    **/
+
 	public function output_csv($array, $filename = 'report.csv') {
 
 		ob_clean();
@@ -441,6 +483,22 @@ class Plugin_Starter {
 
 	    echo $output;
 	    exit();
+
+	}
+
+   /**
+    * Output JSON
+    * ---------------------------------------------
+    * @param $array    | Array/Object | Data to output
+    * @return false
+    * ---------------------------------------------
+    **/
+
+	public function output_json($array) {
+
+		header('Content-type: application/json');
+		echo json_encode($array);
+		exit();
 
 	}
 
