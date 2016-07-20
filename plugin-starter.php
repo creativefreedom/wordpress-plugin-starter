@@ -358,14 +358,17 @@ class Plugin_Starter {
 
 	}
 
-	/**
-	 * Email wrapper, to allow for string replacement
-	 *
-	 * @param string $to email address
-	 * @param string $subject
-	 * @param string $message
-	 * @param array $replacements array of key => value replacements
-	 */
+   /**
+    * Email
+    * ---------------------------------------------
+    * @param  $to           | String | To email address
+    * @param  $subject      | String | The email Subject
+    * @param  $message      | String | The email body
+    * @param  $replacements | Array  | Key=>Value string replacements
+    * @return false
+    * ---------------------------------------------
+    **/
+
 	public function email($to, $subject, $message, $replacements = array()) {
 
 		//replacements
