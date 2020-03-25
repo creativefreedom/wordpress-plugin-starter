@@ -4,10 +4,10 @@
  *
  * @wordpress-plugin
  * Plugin Name: Plugin Starter
- * Description: The Agency WordPress plugin boilerplate
- * Author: Agency
+ * Description: The WordPress plugin boilerplate
+ * Author: Creative Freedom
  * Version: 1.0
- * Author URI: http://agency.sc/
+ * Author URI: https://creativefreedom.com.au/
  */
 
 /*
