@@ -83,8 +83,11 @@ class Plugin_Starter {
 		// add_shortcode('students', array($this, 'shortcode'));
 
 		// Notices (add these when you need to show the notice)
-		// add_action( 'admin_notices', array($this, 'admin_success'));
-		// add_action( 'admin_notices', array($this, 'admin_error'));
+		add_action( 'admin_notices', array($this, 'admin_success'));
+		add_action( 'admin_notices', array($this, 'admin_error'));
+
+		// Validate Required Options
+		$this->validate_required_options();
 
 	}
 
@@ -502,6 +505,19 @@ class Plugin_Starter {
 		header('Content-type: application/json');
 		echo json_encode($array);
 		exit();
+
+	}
+
+	/**
+	 * Validate Required Options
+	 * @return array of errors
+	 */
+
+	public function validate_required_options(){
+
+		if ( ! get_option('plugin_starter_test', false) ) {
+			$this->errors[] = "The variable <a href=\"/wp-admin/admin.php?page=plugin_starter_options\">plugin_starter_test</a> is required to use this plugin.";
+		}
 
 	}
 
