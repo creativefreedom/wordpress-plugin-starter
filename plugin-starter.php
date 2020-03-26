@@ -118,7 +118,7 @@ class Plugin_Starter {
 	public function setup() {
 
 		// register types
-		$this->register_types();
+		$this->register_taxonomies_and_types();
 
 	}
 
@@ -129,58 +129,121 @@ class Plugin_Starter {
     * ---------------------------------------------
     **/
 
-	public function register_types() {
+	public function register_taxonomies_and_types() {
+
+		// Register Custom Post Types
+
+		// $this->register_post_type( 'event' );
+	    // $this->register_post_type( array('story','stories'), array('menu_icon' => 'dashicons-admin-site-alt2', 'menu_position' => 21) );
+
+		
+		// Register Custom Taxonomies
+
+		// $this->register_taxonomy( 'location', array('post', 'page', 'event', 'story') ); 
+		// $this->register_taxonomy( 'format', array('story'), array('rewrite' => array('slug' => 'resources')));; 
+
+	    
+	    // Remove core taxonimies
+
+	    // register_taxonomy('category', array());
+	    // register_taxonomy('post_tag', array());
 
 
-		/*==========  POST TYPE NAME  ==========*/
+	    // Add/Remove supports
 
-		$args = array(
-			'labels'             => self::build_type_labels('Topic', 'Topics'),
-			'public'             => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'topics' ),
-			'capability_type'    => 'post',
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'			 => 'dashicons-welcome-learn-more',
-			'menu_position'      => 40,
-			'supports'           => array( 'title', 'editor', 'page-attributes' )
-		);
-
-		// register_post_type( 'topic', $args );
-
+	    // add_post_type_support( 'event', array('excerpt','thumbnail') );
+	   	// remove_post_type_support( 'post', 'comments' );
 
 	}
 
    /**
-    * Build Type Labels
-    * ---------------------------------------------
-    * @param  $name   | String | Singular Name
-    * @param  $plural | String | Plural Name
-    * @return Array
+    * Register Taxonomy
     * ---------------------------------------------
     **/
 
-	private static function build_type_labels($name, $plural) {
+	private function register_taxonomy($name, $post=array('post'), $options=array()) {
 
-		return array(
-			'name'               => $plural,
-			'singular_name'      => $name,
-			'add_new'            => "Add New",
-			'add_new_item'       => "Add New $name",
-			'edit_item'          => "Edit $name",
-			'new_item'           => "New $name",
-			'all_items'          => "All $plural",
-			'view_item'          => "View $name",
-			'search_items'       => "Search $plural",
-			'not_found'          => "No " . strtolower($plural) . " found",
-			'not_found_in_trash' => "No " . strtolower($plural) . " found in trash",
-			'parent_item_colon'  => '',
-			'menu_name'          => $plural
-		);
+	    if(is_array($name)) {
+	        $single = $name[0];
+	        $plural = $name[1];
+	    } else {
+	        $single = $name;
+	        $plural = $name."s";    
+	    }
+
+	    $args = array(
+	        'hierarchical'          => true,
+	        'labels'                => array(
+	            'name'                       => ucwords($plural),
+	            'singular_name'              => ucwords($single),
+	            'search_items'               => 'Search ' . ucwords($plural),
+	            'popular_items'              => __( 'Popular ' . ucwords($plural) ),
+	            'all_items'                  => __( 'All ' . ucwords($plural) ),
+	            'parent_item'                => null,
+	            'parent_item_colon'          => null,
+	            'edit_item'                  => __( 'Edit ' . ucwords($single) ),
+	            'update_item'                => __( 'Update ' . ucwords($single) ),
+	            'add_new_item'               => __( 'Add New ' . ucwords($single) ),
+	            'new_item_name'              => __( 'New ' . ucwords($single) ),
+	            'separate_items_with_commas' => __( 'Separate ' . $plural . ' with commas' ),
+	            'add_or_remove_items'        => __( 'Add or remove ' . $plural ),
+	            'choose_from_most_used'      => __( 'Choose from the most used ' . $plural ),
+	            'not_found'                  => __( 'No ' . $plural . ' found.' ),
+	            'menu_name'                  => __( ucwords($plural) ),
+	        ),
+	        'show_ui'               => true,
+	        'show_admin_column'     => false,
+	        'query_var'             => true,
+	        'show_in_rest'          => true,
+	        'rewrite'               => array( 'slug' => str_replace(' ','-',$single) ),
+	    );
+
+	    $args = array_replace($args, $options);
+
+	    register_taxonomy( str_replace(' ','-',$single), $post, $args );
+
+	}
+
+   /**
+    * Register Taxonomy
+    * ---------------------------------------------
+    **/
+
+	private function register_post_type($name, $options=array()) {
+
+	    if(is_array($name)) {
+	        $single = $name[0];
+	        $plural = $name[1];
+	    } else {
+	        $single = $name;
+	        $plural = $name."s";    
+	    }
+
+	    $args = array(
+	        'public'             => true,
+	        'labels'             => array(
+	            'name'               => ucwords($plural),
+	            'singular_name'      => ucwords($single),
+	            'add_new'            => 'Add New',
+	            'add_new_item'       => 'Add New '.ucwords($single),
+	            'edit_item'          => 'Edit '.ucwords($single),
+	            'new_item'           => 'New '.ucwords($single),
+	            'all_items'          => 'All '.ucwords($plural),
+	            'view_item'          => 'View '.ucwords($single),
+	            'search_items'       => 'Search '.ucwords($plural),
+	            'not_found'          => 'No '.$plural.' found',
+	            'not_found_in_trash' => 'No '.$plural.' found in Trash',
+	            'parent_item_colon'  => '',
+	            'menu_name'          => ucwords($plural)
+	        ),
+	        'has_archive'        => true,
+	        'menu_position'      => 20,
+	        'show_in_rest'       => true,
+	    );
+
+	    $args = array_replace($args, $options);
+
+	    register_post_type( str_replace(' ','-',$single), $args );
 
 	}
 
